@@ -1,4 +1,5 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
+import tokenApi from '@/utils/auth';
 
 // 路由规则
 // 路由仅仅进行路径匹配
@@ -17,12 +18,13 @@ const routes = [
                 name:'home',
                 component: () => import('@/views/Home.vue'),
             }
-        ]
+        ],
     },
     {
         path:'/login',
         name:'login',
-        component: ()=> import('@/views/login.vue')
+        component: ()=> import('@/views/login.vue'),
+        meta: {requiresAuth: true}
     }
 ];
 
@@ -31,6 +33,14 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes
 });
+
+router.beforeEach(async (to, from) => {
+    const token = tokenApi().getToken();
+    if (!to.meta.requiresAuth && !token && to.name != 'login') {
+        return {name: "login"}
+    } else {
+    }
+})
 
 // 暴露给外部使用
 export default router;
