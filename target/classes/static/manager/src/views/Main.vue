@@ -1,0 +1,3 @@
+<template>
+    <h1>Hello Main</h1>
+</template>
